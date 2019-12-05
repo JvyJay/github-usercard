@@ -3,6 +3,16 @@
            https://api.github.com/users/<your name>
 */
 
+axios.get('https://api.github.com/users/JvyJay')
+  .then(response => {
+    console.log(response)
+    const info = response.data;
+
+    const cards = document.querySelector('.cards');
+    const i = userCards(info)
+    cards.appendChild(i)
+  })
+
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
    data in order to use it to build your component function 
@@ -24,71 +34,81 @@
           user, and adding that card to the DOM.
 */
 
-const followersArray = [{
-    img: 'https://avatars2.githubusercontent.com/u/8883343?v=4',
-    name: 'Daniel Frehner',
-    username: 'tetondan',
-    location: 'Jackson Hole, Wy',
-    profile: 'https://api.github.com/users/tetondan',
-    followers: 92,
-    following: 8,
-    bio: `Program Manager (PT Web) @ Lambda School
-  ↵`
-  },
-  {
-    img: 'https://avatars0.githubusercontent.com/u/10288477?v=4',
-    name: 'Dustin Myers',
-    username: 'dustinmyers',
-    location: 'St George, UT',
-    profile: 'https://api.github.com/users/dustinmyers',
-    followers: 116,
-    following: 11,
-    bio: null
-  },
-  {
-    img: 'https://avatars2.githubusercontent.com/u/397632?v=4',
-    name: 'Dan Levy',
-    username: 'justsml',
-    location: 'Denver, CO',
-    profile: 'https://api.github.com/users/justsml',
-    followers: 353,
-    following: 279,
-    bio: `❤️ OSS
-    ↵Purveyor of farm-to-table JavaScript.
-    ↵Contributor to projects I use: NodeJS, ReactRouter, lodash, mongodb, docker, minio, bluebird & slate.`
-  },
-  {
-    img: 'https://avatars3.githubusercontent.com/u/4186993?v=4',
-    name: 'Luis Hernandez',
-    username: 'luishrd',
-    location: 'Provo, UT',
-    profile: 'https://api.github.com/users/luishrd',
-    followers: 124,
-    following: 7,
-    bio: `requirements => cleanCode;`
-  },
-  {
-    img: 'https://avatars2.githubusercontent.com/u/1958368?v=4',
-    name: 'Josh Knell',
-    username: 'BigKnell',
-    location: null,
-    profile: 'https://api.github.com/users/BigKnell',
-    followers: 161,
-    following: 1,
-    bio: null
-  }
+const followersArray = [
+  'NolanPic',
+  'Matt-Github',
+  'lydiecherilus',
+  'kroaix',
+  'Dazmen'
 ];
 
-// async function fetchUsers() {
-//   const res = await fetch('https://api.github.com/users/JvyJay')
+followersArray.forEach(person => {
+  axios.get(`https://api.github.com/users/${person}`)
+    .then(item => {
+      let card = userCards(item.data)
+      let cards = document.querySelector('.cards')
+      cards.appendChild(card)
+    })
+})
 
-//   const data = await res.json();
+// const followersArray = [
+//   {
+//     img: 'https://avatars2.githubusercontent.com/u/8883343?v=4',
+//     name: 'Daniel Frehner',
+//     username: 'tetondan',
+//     location: 'Jackson Hole, Wy',
+//     profile: 'https://api.github.com/users/tetondan',
+//     followers: 92,
+//     following: 8,
+//     bio: `Program Manager (PT Web) @ Lambda School
+//   ↵`
+//   },
+//   {
+//     img: 'https://avatars0.githubusercontent.com/u/10288477?v=4',
+//     name: 'Dustin Myers',
+//     username: 'dustinmyers',
+//     location: 'St George, UT',
+//     profile: 'https://api.github.com/users/dustinmyers',
+//     followers: 116,
+//     following: 11,
+//     bio: null
+//   },
+//   {
+//     img: 'https://avatars2.githubusercontent.com/u/397632?v=4',
+//     name: 'Dan Levy',
+//     username: 'justsml',
+//     location: 'Denver, CO',
+//     profile: 'https://api.github.com/users/justsml',
+//     followers: 353,
+//     following: 279,
+//     bio: `❤️ OSS
+//     ↵Purveyor of farm-to-table JavaScript.
+//     ↵Contributor to projects I use: NodeJS, ReactRouter, lodash, mongodb, docker, minio, bluebird & slate.`
+//   },
+//   {
+//     img: 'https://avatars3.githubusercontent.com/u/4186993?v=4',
+//     name: 'Luis Hernandez',
+//     username: 'luishrd',
+//     location: 'Provo, UT',
+//     profile: 'https://api.github.com/users/luishrd',
+//     followers: 124,
+//     following: 7,
+//     bio: `requirements => cleanCode;`
+//   },
+//   {
+//     img: 'https://avatars2.githubusercontent.com/u/1958368?v=4',
+//     name: 'Josh Knell',
+//     username: 'BigKnell',
+//     location: null,
+//     profile: 'https://api.github.com/users/BigKnell',
+//     followers: 161,
+//     following: 1,
+//     bio: null
+//   }
+// ];
 
-//   return data;
-// }
 
-// console.log(fetchUsers())
-// console.log(followersArray);
+
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
@@ -110,10 +130,8 @@ const followersArray = [{
 
 */
 
-// function userCards(img, name, username, location, profile, followers, following, bio) {
 
-
-function userCards(img, name, username, location, profile, followers, following, bio) {
+function userCards(stuff) {
   let cardDiv = document.createElement('div');
   let cardImg = document.createElement('img');
   let infoDiv = document.createElement('div');
@@ -125,6 +143,7 @@ function userCards(img, name, username, location, profile, followers, following,
   let followersP = document.createElement('p');
   let followingP = document.createElement('p');
   let bioP = document.createElement('p');
+  let linkTing = stuff.html_url;
 
   cardDiv.appendChild(cardImg);
   cardDiv.appendChild(infoDiv);
@@ -137,16 +156,17 @@ function userCards(img, name, username, location, profile, followers, following,
   infoDiv.appendChild(followingP);
   infoDiv.appendChild(bioP);
 
-  cardImg.src = img;
-  h3Name.textContent = name;
-  usernameP.textContent = username;
-  locationP.textContent = `Location: ${location}`;
-  profileP.textContent = `Profile: ${profile} `;
-  linkA.href = profile;
-  linkA.textContent = profile;
-  followersP.textContent = `Followers: ${followers}`;
-  followingP.textContent = `Following: ${following}`;
-  bioP.textContent = `Bio: ${bio}`;
+  cardImg.src = stuff.avatar_url;
+  h3Name.textContent = stuff.name;
+  usernameP.textContent = stuff.login;
+  locationP.textContent = `Location: ${stuff.location}`;
+  // profileP.textContent = `Profile: ${stuff.html_url} `;
+  linkA.innerHTML = `Profile: ${linkTing.link(stuff.html_url)}`;
+  // linkA.href = stuff.html_url;
+  // linkA.textContent = stuff.html_url;
+  followersP.textContent = `Followers: ${stuff.followers}`;
+  followingP.textContent = `Following: ${stuff.following}`;
+  bioP.textContent = `Bio: ${stuff.bio}`;
 
   cardDiv.classList.add('card');
   infoDiv.classList.add('card-info');
@@ -156,40 +176,9 @@ function userCards(img, name, username, location, profile, followers, following,
   return cardDiv;
 }
 
-const container = document.querySelector('.cards');
-
-followersArray.forEach(stuff => {
-  container.appendChild(userCards(stuff.img, stuff.name, stuff.username, stuff.location, stuff.profile, stuff.followers, stuff.following, stuff.bio))
-})
-// const personOne = userCards(followersArray[0]);
-// const personTwo = userCards(followersArray[1]);
-// const personThree = userCards(followersArray[2]);
-// const personFour = userCards(followersArray[3]);
-// const personFive = userCards(followersArray[4]);
-
-// const personOne = userCards(followersArray[0].img, followersArray[0].name, followersArray[0].username, followersArray[0].location, followersArray[0].profile, followersArray[0].followers, followersArray[0].following, followersArray[0].bio);
-
-// const personTwo = userCards(followersArray[1].img, followersArray[1].name, followersArray[1].username, followersArray[1].location, followersArray[1].profile, followersArray[1].followers, followersArray[1].following, followersArray[1].bio);
-
-// const personThree = userCards(followersArray[2].img, followersArray[2].name, followersArray[2].username, followersArray[2].location, followersArray[2].profile, followersArray[2].followers, followersArray[2].following, followersArray[2].bio);
-
-// const personFour = userCards(followersArray[3].img, followersArray[3].name, followersArray[3].username, followersArray[3].location, followersArray[3].profile, followersArray[3].followers, followersArray[3].following, followersArray[3].bio);
-
-// const personFive = userCards(followersArray[4].img, followersArray[4].name, followersArray[4].username, followersArray[4].location, followersArray[4].profile, followersArray[4].followers, followersArray[4].following, followersArray[4].bio);
-
-// container.append(personOne, personTwo, personThree, personFour, personFive);
-
-axios.get('https://api.github.com/users/JvyJay')
-  .then(response => {
-    console.log(response)
-    Array.from(response.data).forEach(item => {
-      const newPerson = userCards(item)
-      container.appendChild(newPerson)
-    })
-  })
-  .catch(err => {
-    console.log("Error:", err)
-  })
+// followersArray.forEach(stuff => {
+//   container.appendChild(userCards(stuff.img, stuff.name, stuff.username, stuff.location, stuff.profile, stuff.followers, stuff.following, stuff.bio))
+// })
 
 /* List of LS Instructors Github username's: 
   tetondan
