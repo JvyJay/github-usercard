@@ -2,13 +2,6 @@
            (replacing the palceholder with your Github name):
            https://api.github.com/users/<your name>
 */
-// axios.get('https://api.github.com/users/JvyJay')
-//   .then(res => {
-//     console.log("Success!", res)
-//   })
-//   .catch(err => {
-//     console.log("Error:", err)
-//   })
 
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
@@ -86,16 +79,16 @@ const followersArray = [{
   }
 ];
 
-async function fetchUsers() {
-  const res = await fetch('https://api.github.com/users/JvyJay')
+// async function fetchUsers() {
+//   const res = await fetch('https://api.github.com/users/JvyJay')
 
-  const data = await res.json();
+//   const data = await res.json();
 
-  return data;
-}
+//   return data;
+// }
 
-console.log(fetchUsers())
-console.log(followersArray);
+// console.log(fetchUsers())
+// console.log(followersArray);
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
@@ -120,7 +113,7 @@ console.log(followersArray);
 // function userCards(img, name, username, location, profile, followers, following, bio) {
 
 
-function userCards(followersArray) {
+function userCards(img, name, username, location, profile, followers, following, bio) {
   let cardDiv = document.createElement('div');
   let cardImg = document.createElement('img');
   let infoDiv = document.createElement('div');
@@ -144,16 +137,16 @@ function userCards(followersArray) {
   infoDiv.appendChild(followingP);
   infoDiv.appendChild(bioP);
 
-  cardImg.src = followersArray.img;
-  h3Name.textContent = followersArray.name;
-  usernameP.textContent = followersArray.username;
-  locationP.textContent = `Location: ${followersArray.location}`;
-  profileP.textContent = `Profile: `;
-  linkA.href = followersArray.profile;
-  linkA.textContent = followersArray.profile;
-  followersP.textContent = `Followers: ${followersArray.followers}`;
-  followingP.textContent = `Following: ${followersArray.following}`;
-  bioP.textContent = `Bio: ${followersArray.bio}`;
+  cardImg.src = img;
+  h3Name.textContent = name;
+  usernameP.textContent = username;
+  locationP.textContent = `Location: ${location}`;
+  profileP.textContent = `Profile: ${profile} `;
+  linkA.href = profile;
+  linkA.textContent = profile;
+  followersP.textContent = `Followers: ${followers}`;
+  followingP.textContent = `Following: ${following}`;
+  bioP.textContent = `Bio: ${bio}`;
 
   cardDiv.classList.add('card');
   infoDiv.classList.add('card-info');
@@ -164,11 +157,15 @@ function userCards(followersArray) {
 }
 
 const container = document.querySelector('.cards');
-const personOne = userCards(followersArray[0]);
-const personTwo = userCards(followersArray[1]);
-const personThree = userCards(followersArray[2]);
-const personFour = userCards(followersArray[3]);
-const personFive = userCards(followersArray[4]);
+
+followersArray.forEach(stuff => {
+  container.appendChild(userCards(stuff.img, stuff.name, stuff.username, stuff.location, stuff.profile, stuff.followers, stuff.following, stuff.bio))
+})
+// const personOne = userCards(followersArray[0]);
+// const personTwo = userCards(followersArray[1]);
+// const personThree = userCards(followersArray[2]);
+// const personFour = userCards(followersArray[3]);
+// const personFive = userCards(followersArray[4]);
 
 // const personOne = userCards(followersArray[0].img, followersArray[0].name, followersArray[0].username, followersArray[0].location, followersArray[0].profile, followersArray[0].followers, followersArray[0].following, followersArray[0].bio);
 
@@ -180,7 +177,19 @@ const personFive = userCards(followersArray[4]);
 
 // const personFive = userCards(followersArray[4].img, followersArray[4].name, followersArray[4].username, followersArray[4].location, followersArray[4].profile, followersArray[4].followers, followersArray[4].following, followersArray[4].bio);
 
-container.append(personOne, personTwo, personThree, personFour, personFive);
+// container.append(personOne, personTwo, personThree, personFour, personFive);
+
+axios.get('https://api.github.com/users/JvyJay')
+  .then(response => {
+    console.log(response)
+    Array.from(response.data).forEach(item => {
+      const newPerson = userCards(item)
+      container.appendChild(newPerson)
+    })
+  })
+  .catch(err => {
+    console.log("Error:", err)
+  })
 
 /* List of LS Instructors Github username's: 
   tetondan
